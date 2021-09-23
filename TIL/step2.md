@@ -2,8 +2,8 @@ localStorage
 ----
 
 - 브라우저의 임시 저장소
-- setItem(): key & value 추가
-- getItem(): key 를 넘겨주면 value 를 보여줌 
+- setItem(): {key : value} 형태로 값을 저장, value 는 문자열이어야 한다.
+- getItem(): key 를 넘겨주면 value 를 보여줌
 
 상태 관리
 ----
@@ -12,3 +12,9 @@ localStorage
 - '메뉴명' 데이터만 있다면 '개수'를 구할 수 있으므로 개수는 따로 로컬스토리지에 저장하지 않는다.
 - 배열의 메서드: push(), map()
 - join(): 문자열을 하나로 합쳐주는 메서드
+
+JSON 객체
+----
+
+- stringify(): 객체를 문자열로 변환
+- parse(): 문자열을 객체로 변환
