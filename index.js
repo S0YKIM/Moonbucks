@@ -6,16 +6,23 @@
 // [x] 메뉴가 추가되고 나면, input은 빈 값으로 초기화한다.
 // [x] 사용자 입력값이 빈 값이라면 추가되지 않는다.
 
+// TODO 메뉴 수정
+// [x] 메뉴의 수정버튼 클릭 이벤트를 받고, 메뉴 수정하는 모달창이 뜬다.
+// [x] 모달창에서 메뉴명을 입력 받고, 확인 버튼을 누르면 메뉴가 수정된다.
 
+// TODO 메뉴 삭제
+// [x] 메뉴의 삭제버튼 클릭 이벤트를 받고, 메뉴 삭제 컨펌(confirm) 모달창이 뜬다.
+// [x] 확인 버튼을 클릭하면 메뉴가 삭제된다.
+// [x] 총 메뉴 개수를 count 하여 상단에 보여준다.
 
 const $ = (selector) => document.querySelector(selector);
 
 function App() {
-    // form 태그가 자동으로 전송되는걸 막아준다. 
-    $("#espresso-menu-form").addEventListener("submit", (e) => {
-        e.preventDefault();
-    })
-
+    // 총 메뉴 개수를 세는 함수
+    const updateMenuCount = () => {
+        const menuCount = $("#espresso-menu-list"). querySelectorAll("li").length;
+        $(".menu-count").innerText = `총 ${menuCount} 개`
+    }
 
     // 메뉴의 이름을 입력받는 함수
     const addMenuName = () => {
@@ -45,15 +52,35 @@ function App() {
         $("#espresso-menu-list").insertAdjacentHTML(
             "beforeend", menuItemTemplate(espressoMenuName)
         );
-        const menuCount = $("#espresso-menu-list"). querySelectorAll("li").length;
-        $(".menu-count").innerText = `총 ${menuCount} 개`
+        updateMenuCount();
         $("#espresso-menu-name").value = "";
     };
 
+    // 메뉴를 수정하는 함수
+    const updateMenuName = (e) => {
+        const $menuName = e.target.closest("li").querySelector(".menu-name");
+        const updatedMenuName = prompt(
+            "메뉴명을 수정하세요",
+            $menuName.innerText
+        );
+        $menuName.innerText = updatedMenuName;
+    };
+
+    // 메뉴를 삭제하는 함수
+    const removeMenuName = (e) => {
+        if (confirm("정말 삭제하시겠습니까?")) {
+            e.target.closest("li").remove();
+            updateMenuCount();
+        }
+    };
+
+    // form 태그가 자동으로 전송되는걸 막아준다. 
+    $("#espresso-menu-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+    })
+
     // 메뉴의 이름을 '확인' 버튼으로 추가하기
-    $("#espresso-menu-submit-button").addEventListener("click", () => {
-        addMenuName();
-    });
+    $("#espresso-menu-submit-button").addEventListener("click", addMenuName);
 
     // 메뉴의 이름을 '엔터'키로 추가하기
     $("#espresso-menu-name").addEventListener("keypress", (e) => {
@@ -62,15 +89,17 @@ function App() {
         }
         addMenuName();
     });
+
+    // 메뉴를 수정하고 삭제하기
+    $("#espresso-menu-list").addEventListener("click", (e) => {
+        if (e.target.classList.contains("menu-edit-button")) {
+            updateMenuName(e);
+        }
+
+        if (e.target.classList.contains("menu-remove-button")) {
+            removeMenuName(e);
+        }
+    });
 }
 
 App();
-
-
-// TODO 메뉴 수정
-// - 메뉴의 수정버튼 클릭 이벤트를 받고, 메뉴 수정하는 모달창이 뜬다.
-// - 모달창에서 신규메뉴명을 입력 받고, 확인 버튼을 누르면 메뉴가 생성된다.
-
-// TODO 메뉴 삭제
-// - 메뉴의 삭제버튼 클릭 이벤트를 받고, 메뉴 삭제 컨펌 모달창이 뜬다.
-// - 확인 버튼을 클릭하면 메뉴가 삭제된다.
